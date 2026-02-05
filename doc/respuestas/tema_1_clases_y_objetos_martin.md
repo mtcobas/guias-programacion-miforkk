@@ -94,35 +94,87 @@ public class Main {
 
 ## 11. En el código anterior de la clase `Punto` ¿Qué es `new`? ¿Qué es un **constructor**? Pon un ejemplo de constructor en una clase `Empleado` que tenga DNI, nombre y apellidos
 
-### Respuesta
+### La palabra clave *new* sirve para crear un nuevo objeto en memoria. Al usarla, se ejecuta automáticamente un *constructor*, que es un método especial encargado de inicializar el objeto recién creado.
+
+### Un constructor tiene el mismo nombre que la clase y no devuelve ningún tipo. Un ejemplo sería:
+
+public class Empleado {
+    String dni;
+    String nombre;
+    String apellidos;
+
+    public Empleado(String dni, String nombre, String apellidos) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+    }
+}
 
 
 ## 12. ¿Qué es la referencia `this`? ¿Se llama igual en todos los lenguajes? Pon un ejemplo del uso de `this` en la clase `Punto`
 
-### Respuesta
+### La referencia *this* apunta al objeto actual dentro de sus propios métodos. Se utiliza para distinguir entre atributos y parámetros con nombres iguales, o simplemente para dejar claro que se está usando el atributo de la instancia.
 
+### No en todos los lenguajes se llama igual; por ejemplo, en C++ se usa *this* también, pero en Python la palabra es *self*.
+### Ejemplo en Java:
+
+double distanciaA(Punto otro) {
+    int dx = this.x - otro.x;
+    int dy = this.y - otro.y;
+    return Math.sqrt(dx*dx + dy*dy);
+}
 
 ## 13. Añade ahora otro nuevo método que se llame `distanciaA`, que reciba un `Punto` como parámetro y calcule la distancia entre `this` y el punto proporcionado
 
-### Respuesta
+### CÓDIGO
 
+double distanciaA(Punto otro) {
+    int dx = this.x - otro.x;
+    int dy = this.y - otro.y;
+    return Math.sqrt(dx*dx + dy*dy);
+}
 
 ## 14. El paso del `Punto` como parámetro a un método, es **por copia** o **por referencia**, es decir, si se cambia el valor de algún atributo del punto pasado como parámetro, dichos cambios afectan al objeto fuera del método? ¿Qué ocurre si en vez de un `Punto`, se recibiese un entero (`int`) y dicho entero se modificase dentro de la función? 
 
-### Respuesta
+### En Java, los tipos de objeto (como *Punto*) se pasan *por copia de la referencia*, lo que significa que dentro del método se puede modificar el objeto original, ya que ambas variables apuntan a la misma instancia. Cambiar un atributo dentro del método afecta al objeto fuera de él.
+
+### En cambio, los tipos primitivos (como int) se pasan *por valor*, es decir, se copia su contenido. Si un entero se modifica dentro del método, el cambio no afecta fuera de él, ya que se trabaja únicamente con una copia.
 
 
 ## 15. ¿Qué es el método `toString()` en Java? ¿Existe en otros lenguajes? Pon un ejemplo de `toString()` en la clase `Punto` en Java
 
-### Respuesta
+### El método *toString()* es una función heredada de la clase base *Object* que devuelve una representación en texto del objeto. Se puede sobrescribir para mostrar información más útil que la predeterminada.
 
+### Muchos lenguajes tienen mecanismos similares: en Python sería __str__ y en C++ se suele sobrecargar operator<<. 
+
+### Ejemplo:
+
+@Override
+public String toString() {
+    return "(" + x + ", " + y + ")";
+}
 
 ## 16. Reflexiona: ¿una clase es como un `struct` en C? ¿Qué le falta al `struct` para ser como una clase y las variables de ese tipo ser instancias?
 
 
-### Respuesta
+### Una clase se parece conceptualmente a un *struct de C* en el sentido de que ambos permiten agrupar datos. Sin embargo, una clase va más allá porque no solo contiene datos, sino también métodos que operan sobre ellos.
+
+### Al *struct de C* le falta la capacidad de encapsular comportamiento, ocultar detalles internos, definir constructores y aplicar herencia o polimorfismo. Además, no existe creación dinámica automática de instancias con inicialización asociada.
 
 
 ## 17. Quitemos un poco de magia a todo esto: ¿Como se podría “emular”, con `struct` en C, la clase `Punto`, con su función para calcular la distancia al origen? ¿Qué ha pasado con `this`?
 
-### Respuesta
+### En C se puede imitar parcialmente el comportamiento de una clase utilizando un *struct* para los datos y funciones separadas que reciban un puntero al struct. Este puntero actúa como un sustituto manual de *this*.
+
+### Un ejemplo sería:
+
+#include <math.h>
+
+typedef struct {
+    int x;
+    int y;
+} Punto;
+
+double calculaDistanciaAOrigen(Punto* p) {
+    return sqrt(p->x * p->x + p->y * p->y);
+}
